@@ -1,0 +1,101 @@
+#include <stdio.h>
+
+struct BigInt {
+    int8_t isNegative; // nwm czy to jest potrzebne, informacja czy 
+                    // liczba jest ujemna
+    size_t size; // rozmiar tablicy (ilość cyfr w liczbie)
+    uint8_t* data; // wskaźnik na tablicę przechowującą liczby
+}
+
+/*
+Funkcja alokująca pamięć dla struktury BigInt, oraz dla tablicy w strukturze.
+W argumencie podajemy size - rozmiar liczby (ilość cyfr).
+Zwraca wskaźnik na utworzoną strukturę.
+*/
+BigInt* newBigInt(int size);
+
+/*
+Funkcja zwalaniająca pamięć. Zwalnia zarówno pamięć przydzieloną dla danej 
+struktury (data) i pamięć, która jest zarezerwowana dla samej struktury.
+*/
+void freeBigInt(BigInt* a);
+
+/*
+Funkcja wyświetlająca liczbę. Jeśli isNegative jest true to dodaje na początek '-'.
+*/
+void printBigInt(BigInt const * a)
+
+/*
+Funkcja konwertuje liczbę a na string. Tworzy tablicę char do, której w pętli 
+wpisuje kolejne cyfry.
+*/
+char* convertBigIntToString(BigInt* a)
+
+/*
+Funkcja konwertuje string na BigInt. Tworzy nowy BigInt do któego po kolei 
+przypisuje kolejne char.
+Zwraca wskaźnik na utworzoną strukturę.
+*/
+BigInt* convertStringToBigInt(char* str)
+
+
+/*
+Funkcja, która dodaje dwie liczby a i b. Przekazuję te liczby przez wskaźnik, 
+żeby nie kopiować danych (to zwiększa efektywność algorytmu). Argumenty mają 
+modyfikator const, ponieważ liczba a i b nie powinna być zmieniana przy dodawaniu. 
+Zwracam wskaźnik na BigInt również ze względów efektywności. 
+Stosuję zwykły algorytm dodawania w słupku.
+*/
+BigInt* add(BigInt const *a, BigInt const *b);
+
+/*
+Funkcja, która odejmuje dwie liczby a i b. Przekazuję te liczby przez wskaźnik, 
+żeby nie kopiować danych (to zwiększa efektywność algorytmu). Argumenty mają 
+modyfikator const, ponieważ liczba a i b nie powinna być zmieniana przy odejmowaniu. 
+Zwracam wskaźnik na BigInt również ze względów efektywności. 
+Stosuję zwykły algorytm odejmowania w słupku.
+*/
+BigInt* subtract(BigInt const *a, BigInt const *b);
+
+
+/*
+Funkcja, która mnoży dwie liczby a i b. Przekazuję te liczby przez wskaźnik, 
+żeby nie kopiować danych (to zwiększa efektywność algorytmu). Argumenty mają 
+modyfikator const, ponieważ liczba a i b nie powinna być zmieniana przy mnożeniu. 
+Zwracam wskaźnik na BigInt również ze względów efektywności.
+*/
+BigInt* multiply(BigInt const *a, BigInt const *b);
+
+/*
+Funkcja, która dzieli dwie liczby a i b. Przekazuję te liczby przez wskaźnik, 
+żeby nie kopiować danych (to zwiększa efektywność algorytmu). Argumenty mają 
+modyfikator const, ponieważ liczba a i b nie powinna być zmieniana przy dzieleniu. 
+Zwracam wskaźnik na BigInt również ze względów efektywności.
+*/
+BigInt* divide(BigInt const *a, BigInt const *b);
+
+
+/*
+Funkcja porównuje dwie liczby a i b.
+Pomysł jest taki, że sprawdza która jest dłuższa, jeżeli takiej samej długości 
+to po kolei porównuje cyfry. 
+Zwraca 1 gdy a > b, -1 gdy b > a, 0 gdy a == b
+*/
+BigInt* compare(BigInt const *a, BigInt const *b);
+
+/*
+Funkcja konwertuje liczbę a z dowolnego systemu na dowolny.
+Pomysł jest taki, że najpierw robi konwersję z dowolnego systemu na dzisiętny, 
+później z dziesiętnego na docelowy. 
+Zwraca liczbę w danym systemie liczbowym
+*/
+BigInt* convert(int baseFrom, int baseTo, BigInt const *a);
+
+
+/*
+Funkcja wykonuje dodawanie na liczbach w podanym systemie liczbowym.
+Na razie zrobiłem tak że konwertuje na decimal, normalne działanie, i konwertuje 
+wynik na docelowy system. (ale działa na char a nie na bigint)
+I tak wszystkie inne działanie
+*/
+BigInt* add(BigInt* a , BigInt* b, int base);

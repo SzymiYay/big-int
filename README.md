@@ -1,6 +1,6 @@
 # BigInt library
 
-BigInt is a C library for dealing with word huge numbers.
+BigInt is a C library for dealing with huge numbers.
 
 ## Installation
 

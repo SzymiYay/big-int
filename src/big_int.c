@@ -55,6 +55,30 @@ void printBigInt(BigInt* a) {
     printf("\n");
 }
 
+int cmp(void* a, void* b) {
+    BigInt* bigIntA = (BigInt*)a;
+    BigInt* bigIntB = (BigInt*)b;
+
+    printf("BIA = %d\n", bigIntA->size);
+    printf("BIB = %d\n", bigIntB->size);
+
+    if (bigIntA->size > bigIntB->size) {
+        return 1;
+    }
+    if (bigIntA->size < bigIntB->size) {
+        return -1;
+    }
+    for (int i = bigIntA->size - 1; i >= 0; --i) {
+        if (bigIntA->data[i] > bigIntB->data[i]) {
+            return 1;
+        }
+        if (bigIntA->data[i] < bigIntB->data[i]) {
+            return -1;
+        }
+    }
+    return 0;
+}
+
 
 
 /* 
@@ -113,5 +137,23 @@ BigInt* add(BigInt* a, BigInt* b) {
         c->size--;
     }
 
+    return c;
+}
+
+BigInt* subtract(BigInt* a, BigInt* b) {
+    size_t maxSize = a->size > b->size ? a->size : b->size; // nie wiem jaki rozmiar tu powinien być
+    BigInt* c = newBigIntWithSize(maxSize + 1);
+
+    int carry = 0;
+    for (int i = 0; i < maxSize; ++i) {
+        int diff = a->data[i] - b->data[i] - carry;
+        if (diff < 0) {
+            diff += 10;
+            carry = 1;
+        } else {
+            carry = 0;
+        }
+        c->data[i] = diff;
+    }
     return c;
 }

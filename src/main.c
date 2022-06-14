@@ -7,15 +7,17 @@
 
 int main() {
 
-    BigInt* bi1 = newBigIntFromString("234");
-    bi1 = convertStringToBigInt("234");
+    BigInt* bi1 = newBigIntFromString("534");
+    bi1 = convertStringToBigInt("534");
     printBigInt(bi1);
 
-    BigInt* bi2 = newBigIntFromString("567");
-    bi2 = convertStringToBigInt("567");
+    BigInt* bi2 = newBigIntFromString("534");
+    bi2 = convertStringToBigInt("534");
     printBigInt(bi2);
 
     printBigInt(add(bi1, bi2));
+    printBigInt(subtract(bi2, bi1));
+    printf("%d", cmp(bi1, bi2));
 
     return 0;
 }

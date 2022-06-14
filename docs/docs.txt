@@ -74,6 +74,11 @@ Zwracam wskaźnik na BigInt również ze względów efektywności.
 */
 BigInt* divide(BigInt const *a, BigInt const *b);
 
+/*
+Funkcja porównuje dwie dowolne struktury. Zwraca 1 gdy a > b, -1 gdy a < b, 0 gdy a == b.
+*/
+int cmp(void* a, void* b);
+
 
 /*
 Funkcja porównuje dwie liczby a i b.

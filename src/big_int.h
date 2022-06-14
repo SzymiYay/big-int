@@ -4,18 +4,25 @@
 #define BIG_INT_H_
 
 typedef struct {
-    bool isNegative;
     size_t size;
     uint8_t* data;
+    bool isNegative;
 } BigInt;
 
+/* =============== Creating and freeing ===============*/
 BigInt* newBigInt(char* str);
+BigInt* newBigIntWithSize(size_t size);
 void freeBigInt(BigInt* a);
-void printBigInt(BigInt* a);
 
+/* =============== Helpers ===============*/
+void printBigInt(BigInt* a);
+int cmp(void* a, void* b);
+
+/* =============== Converting ===============*/
 char* convertBigIntToString(BigInt* a);
 BigInt* convertStringToBigInt(char* str);
 
+/* =============== Arithmetic operations ===============*/
 BigInt* add(BigInt* a, BigInt* b);
 BigInt* subtract(BigInt* a, BigInt* b);
 BigInt* multiply(BigInt* a, BigInt* b);

@@ -1,2 +1,2 @@
 #!/bin/bash
-make && ./run
+gcc ../src/big_int.c test.c -o test.out && ./test.out

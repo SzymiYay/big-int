@@ -10,26 +10,28 @@ typedef struct {
 } BigInt;
 
 /* =============== Creating and freeing ===============*/
-BigInt* newBigInt(char* str);
+BigInt* newBigIntFromString(char* str);
 BigInt* newBigIntWithSize(size_t size);
 void freeBigInt(BigInt* a);
 
 /* =============== Helpers ===============*/
-void printBigInt(BigInt* a);
-int cmp(void* a, void* b);
+void printBigInt(BigInt* const a);
+void infoBigInt(BigInt* const a);
+int cmp(void* const a, void* const b);
+void reverseString(char* str);
 
 /* =============== Converting ===============*/
 char* convertBigIntToString(BigInt* a);
 BigInt* convertStringToBigInt(char* str);
 
 /* =============== Arithmetic operations ===============*/
-BigInt* add(BigInt* a, BigInt* b);
-BigInt* subtract(BigInt* a, BigInt* b);
-BigInt* multiply(BigInt* a, BigInt* b);
-BigInt* divide(BigInt* a, BigInt* b);
+BigInt* add(BigInt* const a, BigInt* const b);
+BigInt* subtract(BigInt* const a, BigInt* const b);
+BigInt* multiply(BigInt* const a, BigInt* const b);
+BigInt* divide(BigInt* const a, BigInt* const b);
 
 
-void reverseString(char* str);
+
 int valueFromDecimal(char c);
 char valueToDecimal(int num);
 int convertFromAnyBaseToDecimal(int base, char* number);

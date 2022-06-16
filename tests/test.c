@@ -10,6 +10,9 @@ int main() {
     
 
     printf("\n======= TEST 1 =======\n");
+    printf("| First: positive | Second: positive |\n");
+    printf("| The same size |\n");
+    printf("======================\n");
 
     BigInt* b1 = newBigIntFromString("12345");
     BigInt* b2 = newBigIntFromString("12345");
@@ -53,6 +56,9 @@ int main() {
     
 
     printf("\n======= TEST 2 =======\n");
+    printf("| First: positive | Second: positive |\n");
+    printf("| Second bigger than first |\n");
+    printf("======================\n");
 
     b1 = newBigIntFromString("12345");
     b2 = newBigIntFromString("783465");
@@ -74,13 +80,12 @@ int main() {
     free(res);
 
     printf("Subtract:\n");
+    BigInt* d = subtract(b1, b2);
+    infoBigInt(d);
     res = convertBigIntToString(subtract(b1, b2));
-    for (int i = 0; i < strlen(res); ++i) {
-        printf("%d ", res[i]);
-    }
     reverseString(res);
     for (int i = 0; i < strlen(res); ++i) {
-        printf("%d ", res[i]);
+        printf("%d ", res[i] - '0');
     }
     // Jest dobrze ale coś dziwnego wypisuje
     printf(strcmp(res, "-771120") ? "!!! WRONG !!!\n" : "[OK]\n");
@@ -102,6 +107,9 @@ int main() {
     
 
     printf("\n======= TEST 3 =======\n");
+    printf("| First: positive | Second: positive |\n");
+    printf("| Really big |\n");
+    printf("======================\n");
 
     b1 = newBigIntFromString("734125096103596017857861235780615413425");
     b2 = newBigIntFromString("1234507861234587912349857618923576234");
@@ -142,6 +150,9 @@ int main() {
 
 
     printf("\n======= TEST 4 =======\n");
+    printf("| First: negative | Second: positive |\n");
+    printf("| Really big |\n");
+    printf("======================\n");
 
     b1 = newBigIntFromString("-734125096103596017857861235780615413425");
     b2 = newBigIntFromString("1234507861234587912349857618923576234");
@@ -157,9 +168,14 @@ int main() {
     free(res2);
 
     printf("Add:\n");
-    res = convertBigIntToString(add(b1, b2));
+    BigInt* c = add(b1, b2);
+    res = convertBigIntToString(c);
     reverseString(res);
-    printf(strcmp(res, "-732890588242361429945511378161691837191") ? "!!! WRONG !!!\n" : "[OK]\n");
+    for (int i = 0; i < c->size + 1; ++i) {
+        printf("%d ", res[i] - '0');
+    }
+    infoBigInt(c);
+    printf(strcmp(res, "-732890588242361429945511378161691837191") ? "!!! WRONG !!! powinno byc dobrze wtf\n" : "[OK]\n");
     free(res);
 
     printf("Subtract:\n");
@@ -176,6 +192,226 @@ int main() {
 
     printf("Compare:\n");
     printf(cmp(b1, b2) == -1 ? "[OK]\n" : "!!! WRONG !!!\n");
+
+    freeBigInt(b1);
+    freeBigInt(b2);
+
+
+
+
+    printf("\n======= TEST 5 =======\n");
+    printf("| First: negative | Second: negative |\n");
+    printf("| Second bigger than first |\n");
+    printf("======================\n");
+
+    b1 = newBigIntFromString("-12345");
+    b2 = newBigIntFromString("-54321");
+
+    printf("Create:\n");
+    res1 = convertBigIntToString(b1);
+    res2 = convertBigIntToString(b2);
+    reverseString(res1);
+    reverseString(res2);
+    printf(strcmp(res1, "-12345") ? "!!! WRONG !!!\n" : "[OK]\n");
+    printf(strcmp(res2, "-54321") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res1);
+    free(res2);
+
+    printf("Add:\n");
+    res = convertBigIntToString(add(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "-66666") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Subtract:\n");
+    res = convertBigIntToString(subtract(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "41976") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Multiply:\n");
+    res = convertBigIntToString(multiply(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "670592745") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Compare:\n");
+    printf(cmp(b1, b2) == 1 ? "[OK]\n" : "!!! WRONG !!!\n");
+
+    freeBigInt(b1);
+    freeBigInt(b2);
+
+
+    printf("\n======= TEST 6 =======\n");
+    printf("| First: positive | Second: zero |\n");
+    printf("| Really big and zero |\n");
+    printf("======================\n");
+
+    b1 = newBigIntFromString("130459870193486509856078951345");
+    b2 = newBigIntFromString("0");
+
+    printf("Create:\n");
+    res1 = convertBigIntToString(b1);
+    res2 = convertBigIntToString(b2);
+    reverseString(res1);
+    reverseString(res2);
+    printf(strcmp(res1, "130459870193486509856078951345") ? "!!! WRONG !!!\n" : "[OK]\n");
+    printf(strcmp(res2, "0") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res1);
+    free(res2);
+
+    printf("Add:\n");
+    res = convertBigIntToString(add(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "130459870193486509856078951345") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Subtract:\n");
+    res = convertBigIntToString(subtract(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "130459870193486509856078951345") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Multiply:\n");
+    res = convertBigIntToString(multiply(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "0") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Compare:\n");
+    printf(cmp(b1, b2) == 1 ? "[OK]\n" : "!!! WRONG !!!\n");
+
+    freeBigInt(b1);
+    freeBigInt(b2);
+
+
+
+    printf("\n======= TEST 7 =======\n");
+    printf("| First: zero | Second: negative |\n");
+    printf("| Really big and zero |\n");
+    printf("======================\n");
+
+    b1 = newBigIntFromString("0");
+    b2 = newBigIntFromString("-1340567910459367818723465");
+
+    printf("Create:\n");
+    res1 = convertBigIntToString(b1);
+    res2 = convertBigIntToString(b2);
+    reverseString(res1);
+    reverseString(res2);
+    printf(strcmp(res1, "0") ? "!!! WRONG !!!\n" : "[OK]\n");
+    printf(strcmp(res2, "-1340567910459367818723465") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res1);
+    free(res2);
+
+    printf("Add:\n");
+    res = convertBigIntToString(add(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "-1340567910459367818723465") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Subtract:\n");
+    res = convertBigIntToString(subtract(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "-1340567910459367818723465") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Multiply:\n");
+    res = convertBigIntToString(multiply(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "0") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Compare:\n");
+    printf(cmp(b1, b2) == 1 ? "[OK]\n" : "!!! WRONG !!!\n");
+
+    freeBigInt(b1);
+    freeBigInt(b2);
+
+
+
+    printf("\n======= TEST 7 =======\n");
+    printf("| First: zero | Second: zero |\n");
+    printf("| Two zeros |\n");
+    printf("======================\n");
+
+    b1 = newBigIntFromString("0");
+    b2 = newBigIntFromString("0");
+
+    printf("Create:\n");
+    res1 = convertBigIntToString(b1);
+    res2 = convertBigIntToString(b2);
+    reverseString(res1);
+    reverseString(res2);
+    printf(strcmp(res1, "0") ? "!!! WRONG !!!\n" : "[OK]\n");
+    printf(strcmp(res2, "0") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res1);
+    free(res2);
+
+    printf("Add:\n");
+    res = convertBigIntToString(add(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "0") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Subtract:\n");
+    res = convertBigIntToString(subtract(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "0") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Multiply:\n");
+    res = convertBigIntToString(multiply(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "0") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Compare:\n");
+    printf(cmp(b1, b2) == 0 ? "[OK]\n" : "!!! WRONG !!!\n");
+
+    freeBigInt(b1);
+    freeBigInt(b2);
+
+
+
+    printf("\n======= TEST 8 =======\n");
+    printf("| First: incorrect positive | Second: incorrect negative|\n");
+    printf("| Positive with leading zeros, negative with leading zeros |\n");
+    printf("======================\n");
+
+    b1 = newBigIntFromString("000000112387945611234");
+    b2 = newBigIntFromString("-000001297863518923745612345");
+
+    printf("Create:\n");
+    res1 = convertBigIntToString(b1);
+    res2 = convertBigIntToString(b2);
+    reverseString(res1);
+    reverseString(res2);
+    printf(strcmp(res1, "112387945611234") ? "!!! WRONG !!!\n" : "[OK]\n");
+    printf(strcmp(res2, "-1297863518923745612345") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res1);
+    free(res2);
+
+    printf("Add:\n");
+    res = convertBigIntToString(add(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "-1297863406535800001111") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Subtract:\n");
+    res = convertBigIntToString(subtract(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "1297863631311691223579") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Multiply:\n");
+    res = convertBigIntToString(multiply(b1, b2));
+    reverseString(res);
+    printf(strcmp(res, "-145864214575606691200057906641083730") ? "!!! WRONG !!!\n" : "[OK]\n");
+    free(res);
+
+    printf("Compare:\n");
+    printf(cmp(b1, b2) == 1 ? "[OK]\n" : "!!! WRONG !!!\n");
 
     freeBigInt(b1);
     freeBigInt(b2);

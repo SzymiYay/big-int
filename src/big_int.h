@@ -15,20 +15,21 @@ BigInt* newBigIntWithSize(size_t size);
 void freeBigInt(BigInt* a);
 
 /* =============== Helpers ===============*/
-void printBigInt(BigInt* const a);
-void infoBigInt(BigInt* const a);
-int cmp(void* const a, void* const b);
+void printBigInt(BigInt const *a);
+void infoBigInt(BigInt const *a);
+int cmp(void const *a, void const *b);
 void reverseString(char* str);
+BigInt* copy(BigInt const *a);
 
 /* =============== Converting ===============*/
-char* convertBigIntToString(BigInt* a);
+char* convertBigIntToString(BigInt const *a);
 BigInt* convertStringToBigInt(char* str);
 
 /* =============== Arithmetic operations ===============*/
-BigInt* add(BigInt* const a, BigInt* const b);
-BigInt* subtract(BigInt* const a, BigInt* const b);
-BigInt* multiply(BigInt* const a, BigInt* const b);
-BigInt* divide(BigInt* const a, BigInt* const b);
+BigInt* add(BigInt *a, BigInt *b);
+BigInt* subtract(BigInt *a, BigInt *b);
+BigInt* multiply(BigInt const *a, BigInt const *b);
+BigInt* divide(BigInt const *a, BigInt const *b);
 
 
 

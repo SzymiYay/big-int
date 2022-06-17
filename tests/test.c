@@ -171,7 +171,7 @@ int main() {
     BigInt* c = add(b1, b2);
     res = convertBigIntToString(c);
     reverseString(res);
-    for (int i = 0; i < c->size + 1; ++i) {
+    for (int i = 0; i < c->size; ++i) {
         printf("%d ", res[i] - '0');
     }
     infoBigInt(c);

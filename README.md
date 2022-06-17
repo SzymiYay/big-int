@@ -2,12 +2,19 @@
 
 BigInt is a C library for dealing with huge numbers.
 
-## Installation
+## Compilation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
-
+Compile
 ```bash
-pip install foobar~
+make
+```
+Run
+```bash
+run
+```
+Debug
+```bash
+make debug
 ```
 
 ## Usage

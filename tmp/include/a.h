@@ -1,0 +1,2 @@
+// XD
+void printA();

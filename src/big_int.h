@@ -1,35 +1,35 @@
-#include <stdint.h>
-
 #ifndef BIG_INT_H_
 #define BIG_INT_H_
+
+#include <stdint.h>
 
 typedef struct {
     size_t size;
     uint8_t* data;
-    bool isNegative;
+    bool is_negative;
 } BigInt;
 
 /* =============== Creating and freeing ===============*/
-BigInt* newBigIntFromString(char* str);
-BigInt* newBigIntWithSize(size_t size);
-void freeBigInt(BigInt* a);
+BigInt* bi_new_from_string(char const * str);
+BigInt* bi_new_with_size(size_t size);
+BigInt* bi_new_from_big_int(BigInt const *a);
+void bi_free(BigInt* a);
 
 /* =============== Helpers ===============*/
-void printBigInt(BigInt const *a);
-void infoBigInt(BigInt const *a);
-int cmp(void const *a, void const *b);
-void reverseString(char* str);
-BigInt* copy(BigInt const *a);
+void bi_print(BigInt const *a);
+void bi_info(BigInt const *a);
+int bi_cmp(void const *a, void const *b);
+void reverseString(char* str); // ANSI C
 
 /* =============== Converting ===============*/
-char* convertBigIntToString(BigInt const *a);
-BigInt* convertStringToBigInt(char* str);
+char* bi_convert_to_string(BigInt const *a);
+BigInt* bi_convert_to_big_int(char* str);
 
 /* =============== Arithmetic operations ===============*/
-BigInt* add(BigInt *a, BigInt *b);
-BigInt* subtract(BigInt *a, BigInt *b);
-BigInt* multiply(BigInt const *a, BigInt const *b);
-BigInt* divide(BigInt const *a, BigInt const *b);
+BigInt* bi_add(BigInt *a, BigInt *b);
+BigInt* bi_subtract(BigInt *a, BigInt *b);
+BigInt* bi_multiply(BigInt const *a, BigInt const *b);
+BigInt* bi_divide(BigInt const *a, BigInt const *b);
 
 
 

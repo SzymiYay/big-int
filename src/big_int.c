@@ -6,6 +6,7 @@
 #include "big_int.h"
 
 
+
 /* 
 =============== Creating and freeing ===============
 */
@@ -24,28 +25,30 @@ from given string.
     a : BigInt*
         pointer to the BigInt structure
 */
-BigInt* newBigIntFromString(char* str) {
+BigInt* bi_new_from_string(char const * str) {
 
     BigInt* a = malloc(sizeof(BigInt));
 
-    if (a) {
-        a->isNegative = false;
+    if (!a) {
+        exit(0);
+    }
 
-        if (str[0] == '-') {
-            str++;
-            a->isNegative = true;
-        }
+    a->is_negative = false;
 
-        if (strlen(str) != 1) {
-            str += strspn(str, "0");
-        }
+    if (str[0] == '-') {
+        str++;
+        a->is_negative = true;
+    }
 
-        a->size = strlen(str);
-        a->data = malloc(a->size * sizeof(uint8_t));
+    if (strlen(str) != 1) {
+        str += strspn(str, "0");
+    }
 
-        for (int i = 0; i < a->size; ++i) {
-            a->data[a->size - 1 - i] = str[i] - '0';
-        }
+    a->size = strlen(str);
+    a->data = malloc(a->size * sizeof(uint8_t));
+
+    for (unsigned int i = 0; i < a->size; ++i) {
+        a->data[a->size - 1 - i] = str[i] - '0';
     }
 
     return a;
@@ -66,17 +69,36 @@ from given string.
     a : BigInt*
         pointer to the BigInt structure
 */
-BigInt* newBigIntWithSize(size_t size) {
-    BigInt* a = malloc(sizeof(a));
+BigInt* bi_new_with_size(size_t size) {
+    BigInt* a = malloc(sizeof(BigInt));
 
-    if (a) {
-        a->size = size;
-        a->data = malloc(size * sizeof(int));
-        a->isNegative = false;
+    if (!a) {
+        exit(0);
     }
+
+    a->size = size;
+    a->data = malloc(size * sizeof(uint8_t));
+    a->is_negative = false;
 
     return a;
 }
+
+BigInt* bi_new_from_big_int(BigInt const * a) {
+    BigInt* b = bi_new_with_size(a->size);
+
+    if (!b) {
+        exit(0);
+    }
+
+    for (unsigned int i = 0; i < a->size; ++i) {
+        b->data[i] = a->data[i];
+    }
+
+    b->is_negative = a->is_negative;
+
+    return b;
+}
+
 
 /*
 Free allocated memory in data and whole structure.
@@ -91,11 +113,9 @@ Free allocated memory in data and whole structure.
     void
         nothing to return
 */
-void freeBigInt(BigInt* a) {
-    if (a) {
-        free(a->data);
-        free(a);
-    }
+void bi_free(BigInt* a) {
+    free(a->data);
+    free(a);
 }
 
 
@@ -116,8 +136,8 @@ Prints BigInt data as a number
     void
         nothing to return
 */
-void printBigInt(BigInt const *a) {
-    if (a->isNegative) {
+void bi_print(BigInt const *a) {
+    if (a->is_negative) {
         printf("-");
     }
     for (int i = a->size - 1; i >= 0; --i) {
@@ -130,7 +150,7 @@ void printBigInt(BigInt const *a) {
 Prints all information about BigInt.
 * number
 * size
-* isNegative
+* is_negative
 
     Paramteres
     ----------
@@ -142,7 +162,7 @@ Prints all information about BigInt.
     void
         nothing to return
 */
-void infoBigInt(BigInt const *a) {
+void bi_info(BigInt const *a) {
     printf("\n---------- INFO ----------\n");
     printf("number: ");
     for (int i = a->size - 1; i >= 0; --i) {
@@ -150,14 +170,14 @@ void infoBigInt(BigInt const *a) {
     }
     printf("\n");
     printf("size: %ld\n", a->size);
-    printf("isNegative: ");
-    printf(a->isNegative ? "true\n" : "false\n");
+    printf("is_negative: ");
+    printf(a->is_negative ? "true\n" : "false\n");
     printf("--------------------------\n\n");
 }
 
 /*
 Compare two BigInt objects. 
-1. Check which isNegative.
+1. Check which is_negative.
 2. Check the size or go from last digit and compare every element
 
     Paramteres
@@ -174,46 +194,46 @@ Compare two BigInt objects.
         -1  if b < a
          0  if a == b
 */
-int cmp(void const *a, void const *b) {
-    BigInt* bigIntA = (BigInt*)a;
-    BigInt* bigIntB = (BigInt*)b;
+int bi_cmp(void const *a, void const *b) {
+    BigInt* bi_A = (BigInt*)a;
+    BigInt* bi_B = (BigInt*)b;
 
-    if (!bigIntA->isNegative && bigIntB->isNegative) {
+    if (!bi_A->is_negative && bi_B->is_negative) {
         return 1;
     }
-    if (bigIntA->isNegative && !bigIntB->isNegative) {
+    if (bi_A->is_negative && !bi_B->is_negative) {
         return -1;
     }
 
-    if (bigIntA->isNegative && bigIntB->isNegative) {
-        if (bigIntA->size < bigIntB->size) {
+    if (bi_A->is_negative && bi_B->is_negative) {
+        if (bi_A->size < bi_B->size) {
             return 1;
         }
-        if (bigIntA->size > bigIntB->size) {
+        if (bi_A->size > bi_B->size) {
             return -1;
         }
-        for (int i = bigIntA->size - 1; i >= 0; --i) {
-            if (bigIntA->data[i] < bigIntB->data[i]) {
+        for (unsigned int i = bi_A->size - 1; i >= 0; --i) {
+            if (bi_A->data[i] < bi_B->data[i]) {
                 return 1;
             }
-            if (bigIntA->data[i] > bigIntB->data[i]) {
+            if (bi_A->data[i] > bi_B->data[i]) {
                 return -1;
             }
         }
         return 0;
     }
 
-    if (bigIntA->size > bigIntB->size) {
+    if (bi_A->size > bi_B->size) {
         return 1;
     }
-    if (bigIntA->size < bigIntB->size) {
+    if (bi_A->size < bi_B->size) {
         return -1;
     }
-    for (int i = bigIntA->size - 1; i >= 0; --i) {
-        if (bigIntA->data[i] > bigIntB->data[i]) {
+    for (int i = bi_A->size - 1; i >= 0; --i) {
+        if (bi_A->data[i] > bi_B->data[i]) {
             return 1;
         }
-        if (bigIntA->data[i] < bigIntB->data[i]) {
+        if (bi_A->data[i] < bi_B->data[i]) {
             return -1;
         }
     }
@@ -236,43 +256,20 @@ Reverse string
 void reverseString(char* str) {
     if (str[0] == 45) {
         int len = strlen(str) + 1;
-        for (int i = 1; i < len / 2; ++i) {
+        for (unsigned int i = 1; i < len / 2; ++i) {
             char temp = str[i];
             str[i] = str[len - 1 - i];
             str[len - 1 - i] = temp;
         }
     } else {
         int len = strlen(str);
-        for (int i = 0; i < len / 2; ++i) {
+        for (unsigned int i = 0; i < len / 2; ++i) {
             char temp = str[i];
             str[i] = str[len - 1 - i];
             str[len - 1 - i] = temp;
         }
     }
 }
-
-/*
-Creates new structure and copy all elements from given
-
-    Paramteres
-    ----------
-    a : BigInt const *
-        pointer to the const BigInt
-
-    Returns
-    ----------
-    b : BigInt *
-        pointer to the BigInt
-*/
-BigInt* copy(BigInt const *a) {
-    BigInt* b = newBigIntWithSize(a->size);
-    b->isNegative = a->isNegative;
-    for (int i = 0; i < a->size; ++i) {
-        b->data[i] = a->data[i];
-    }
-    return b;
-}
-
 
 
 /* 
@@ -293,14 +290,14 @@ Convert BigInt structure to string
         pointer to an array of chars - numbers from BigInt->data as chars
 
 */
-char* convertBigIntToString(BigInt const *a) {
+char* bi_convert_to_string(BigInt const *a) {
     char* b_str;
 
-    if (a->isNegative) {
+    if (a->is_negative) {
         b_str = malloc(a->size + 2);
 
         b_str[0] = '-';
-        for (int i = 1; i < a->size + 1; ++i) {
+        for (unsigned int i = 1; i < a->size + 1; ++i) {
             b_str[i] = a->data[i - 1] + '0';
         }
 
@@ -308,7 +305,7 @@ char* convertBigIntToString(BigInt const *a) {
     } else {
         b_str = malloc(a->size + 1);
 
-        for (int i = 0; i < a->size; ++i) {
+        for (unsigned int i = 0; i < a->size; ++i) {
             b_str[i] = a->data[i] + '0';
         }
 
@@ -331,9 +328,9 @@ Convert string to BigInt structure
     a : BigInt*
         pointer to the BigInt structure
 */
-BigInt* convertStringToBigInt(char* str) {
+BigInt* bi_convert_to_big_int(char* str) {
     str += strspn(str, "0");
-    BigInt* a = newBigIntFromString(str);
+    BigInt* a = bi_new_from_string(str);
 
     // for (int i = 0; i < a->size; ++i) {
     //     a->data[a->size - 1 - i] = str[i] - '0';
@@ -349,7 +346,7 @@ BigInt* convertStringToBigInt(char* str) {
 */
 
 /*
-Add two BigInt structures 
+bi_Add two BigInt structures 
 
     Paramteres
     ----------
@@ -363,43 +360,45 @@ Add two BigInt structures
     c : BigInt*
         pointer to the BigInt structure
 */
-BigInt* add(BigInt *a, BigInt *b) {
+BigInt* bi_add(BigInt *a, BigInt *b) {
 
     size_t maxSize = a->size > b->size ? a->size : b->size;
-    BigInt* c = newBigIntWithSize(maxSize + 1);
+    BigInt* c = bi_new_with_size(maxSize + 1);
 
     if (a->size == 1 && a->data[0] == 0) {
-        c = copy(b);
+        c = bi_new_from_big_int(b);
         return c;
     }
 
     if (b->size == 1 && b->data[0] == 0) {
-        c = copy(a);
+        c = bi_new_from_big_int(a);
         return c;
     }
 
-    if (!a->isNegative && b->isNegative) { // a + -b = a - b
-        b->isNegative = false;
-        c = subtract(a, b);
-        b->isNegative = true;
+    if (!a->is_negative && b->is_negative) { // a + -b = a - b
+        b->is_negative = false;
+        c = bi_subtract(a, b);
+        b->is_negative = true;
     }
 
-    else if (a->isNegative && !b->isNegative) { // -a + b = b - a
-        a->isNegative = false;
-        c = subtract(b, a);
-        a->isNegative = true;
+    else if (a->is_negative && !b->is_negative) { // -a + b = b - a
+        a->is_negative = false;
+        c = bi_subtract(b, a);
+        a->is_negative = true;
     }
 
     else {
         int carry = 0;
-        for (int i = 0; i < maxSize; ++i) {
+        for (unsigned int i = 0; i < maxSize; ++i) {
             int tmp = carry;
+
             if (i < a->size) {
                 tmp += a->data[i];
             }
             if (i < b->size) {
                 tmp += b->data[i];
             }
+
             carry = tmp / 10;
             c->data[i] = tmp % 10;
         }
@@ -411,8 +410,8 @@ BigInt* add(BigInt *a, BigInt *b) {
         }
     }
     
-    if (a->isNegative && b->isNegative) {
-        c->isNegative = true;
+    if (a->is_negative && b->is_negative) {
+        c->is_negative = true;
     }
 
     return c;
@@ -420,7 +419,7 @@ BigInt* add(BigInt *a, BigInt *b) {
 
 
 /*
-Subtract two BigInt structures 
+bi_Subtract two BigInt structures 
 
     Paramteres
     ----------
@@ -434,48 +433,49 @@ Subtract two BigInt structures
     c : BigInt*
         pointer to the BigInt structure
 */
-BigInt* subtract(BigInt *a, BigInt *b) {
+BigInt* bi_subtract(BigInt *a, BigInt *b) {
     size_t maxSize = a->size > b->size ? a->size : b->size; // nie wiem jaki rozmiar tu powinien być
-    BigInt* c = newBigIntWithSize(maxSize + 1);
+    BigInt* c = bi_new_with_size(maxSize + 1);
 
     if (a->size == 1 && a->data[0] == 0) {
-        c = copy(b);
+        c = bi_new_from_big_int(b);
         return c;
     }
 
     if (b->size == 1 && b->data[0] == 0) {
-        c = copy(a);
+        c = bi_new_from_big_int(a);
         return c;
     }
 
 
-    if (!a->isNegative && b->isNegative) { // a - -b = a + b
-        b->isNegative = false;
-        c = add(a, b);
-        b->isNegative = true;
+    if (!a->is_negative && b->is_negative) { // a - -b = a + b
+        b->is_negative = false;
+        c = bi_add(a, b);
+        b->is_negative = true;
     }
 
-    else if (a->isNegative && !b->isNegative) { // -a - b = -b + -a = -(a + b)
-        a->isNegative = false;
-        c = add(a, b);
-        a->isNegative = true;
-        c->isNegative = true;
+    else if (a->is_negative && !b->is_negative) { // -a - b = -b + -a = -(a + b)
+        a->is_negative = false;
+        c = bi_add(a, b);
+        a->is_negative = true;
+        c->is_negative = true;
     }
 
-    else if (a->isNegative && b->isNegative) { // -a - -b = -a + b = b - a
-        a->isNegative = false;
-        b->isNegative = false;
-        c = subtract(b, a);
-        a->isNegative = true;
-        b->isNegative = true;
+    else if (a->is_negative && b->is_negative) { // -a - -b = -a + b = b - a
+        a->is_negative = false;
+        b->is_negative = false;
+        c = bi_subtract(b, a);
+        a->is_negative = true;
+        b->is_negative = true;
     }
 
     else {
-        int change = cmp(a, b); // inna nazwa powinna być
+        int change = bi_cmp(a, b); // inna nazwa powinna być
 
         int carry = 0;
-        for (int i = 0; i < maxSize; ++i) {
+        for (unsigned int i = 0; i < maxSize; ++i) {
             int diff;
+
             if (change == -1) {
                 diff = b->data[i] - a->data[i] - carry;
             } else {
@@ -492,7 +492,7 @@ BigInt* subtract(BigInt *a, BigInt *b) {
         }
 
         if (change == -1) {
-            c->isNegative = true;
+            c->is_negative = true;
         }
 
         int k = c->size - 1;
@@ -504,7 +504,7 @@ BigInt* subtract(BigInt *a, BigInt *b) {
         if (c->size == 0) {
             c->size = 1;
             c->data[0] = 0;
-            c->isNegative = false;
+            c->is_negative = false;
         }
     }
     
@@ -527,22 +527,22 @@ Multiply two BigInt structures
     c : BigInt*
         pointer to the BigInt structure
 */
-BigInt* multiply(BigInt const *a, BigInt const *b) {
+BigInt* bi_multiply(BigInt const *a, BigInt const *b) {
     size_t maxSize = a->size + b->size;
-    BigInt* c = newBigIntWithSize(maxSize + 1);
+    BigInt* c = bi_new_with_size(maxSize + 1);
     
-    if ((a->isNegative && !b->isNegative) || (!a->isNegative && b->isNegative)) {
-        c->isNegative = true;
+    if ((a->is_negative && !b->is_negative) || (!a->is_negative && b->is_negative)) {
+        c->is_negative = true;
     }
 
     if ((a->size == 1 && a->data[0] == 0) || (b->size == 1 &&b->data[0] == 0)) {
         c->size = 1;
         c->data[0] = 0;
-        c->isNegative = false;
+        c->is_negative = false;
         return c;
     }
 
-    for (int i = 0; i < maxSize; ++i) {
+    for (unsigned int i = 0; i < maxSize; ++i) {
         c->data[i] = 0;
     }
 
@@ -551,7 +551,7 @@ BigInt* multiply(BigInt const *a, BigInt const *b) {
     for (int i = 0; i < a->size; ++i) {
         int carry = 0;
         idx = startIdx;
-        for (int j = 0; j < b->size; ++j) {
+        for (unsigned int j = 0; j < b->size; ++j) {
             int product = a->data[i] * b->data[j] + carry;
 
             carry = product / 10;

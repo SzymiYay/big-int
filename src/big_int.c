@@ -435,7 +435,7 @@ bi_Subtract two BigInt structures
 */
 BigInt* bi_subtract(BigInt *a, BigInt *b) {
     size_t maxSize = a->size > b->size ? a->size : b->size; // nie wiem jaki rozmiar tu powinien być
-    BigInt* c = bi_new_with_size(maxSize + 1);
+    BigInt* c;
 
     if (a->size == 1 && a->data[0] == 0) {
         c = bi_new_from_big_int(b);
@@ -447,6 +447,8 @@ BigInt* bi_subtract(BigInt *a, BigInt *b) {
         return c;
     }
 
+    c = bi_new_with_size(maxSize); // usunałem -1 i nie ma wycieku pamięci 
+    int change = bi_cmp(a, b);
 
     if (!a->is_negative && b->is_negative) { // a - -b = a + b
         b->is_negative = false;
@@ -469,45 +471,34 @@ BigInt* bi_subtract(BigInt *a, BigInt *b) {
         b->is_negative = true;
     }
 
+    else if (change < 0) { // b > a, a - b = -(b - a)
+        c = bi_subtract(b, a);
+        c->is_negative = true;
+    }
+
     else {
-        int change = bi_cmp(a, b); // inna nazwa powinna być
+        bool carry = false;
+        for (unsigned int i = 0; i < a->size; ++i) {
+            int res = carry ? -1 : 0;
 
-        int carry = 0;
-        for (unsigned int i = 0; i < maxSize; ++i) {
-            int diff;
-
-            if (change == -1) {
-                diff = b->data[i] - a->data[i] - carry;
-            } else {
-                diff = a->data[i] - b->data[i] - carry;
+            if (i < a->size) {
+                res += a->data[i];
             }
-            
-            if (diff < 0) {
-                diff += 10;
-                carry = 1;
-            } else {
-                carry = 0;
+            if (i < b->size) {
+                res -= b->data[i];
             }
-            c->data[i] = diff;
-        }
 
-        if (change == -1) {
-            c->is_negative = true;
-        }
+            if (res < 0) {
+                carry = true;
+                res += 10;
+            } else {
+                carry = false;
+            }
 
-        int k = c->size - 1;
-        while (c->size > 0 && c->data[k] == 0) {
-            c->size--;
-            k--;
-        }
-
-        if (c->size == 0) {
-            c->size = 1;
-            c->data[0] = 0;
-            c->is_negative = false;
+            c->data[i] = res;
         }
     }
-    
+
     return c;
 }
 

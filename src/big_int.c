@@ -447,8 +447,14 @@ BigInt* bi_subtract(BigInt *a, BigInt *b) {
         return c;
     }
 
-    c = bi_new_with_size(maxSize); // usunałem -1 i nie ma wycieku pamięci 
+     
     int change = bi_cmp(a, b);
+
+    if (!change) {
+        c = bi_new_with_size(1);
+        c->data[0] = 0;
+        return c;
+    }
 
     if (!a->is_negative && b->is_negative) { // a - -b = a + b
         b->is_negative = false;
@@ -477,6 +483,8 @@ BigInt* bi_subtract(BigInt *a, BigInt *b) {
     }
 
     else {
+        c = bi_new_with_size(maxSize); // usunałem -1 i nie ma wycieku pamięci
+
         bool carry = false;
         for (unsigned int i = 0; i < a->size; ++i) {
             int res = carry ? -1 : 0;

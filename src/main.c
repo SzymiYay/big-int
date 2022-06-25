@@ -10,7 +10,7 @@ int main() {
     BigInt* bi1 = bi_new_from_string("12345");
     bi_info(bi1);
 
-    BigInt* bi2 = bi_new_from_string("783465");
+    BigInt* bi2 = bi_new_from_string("12345");
     bi_info(bi2);
 
     // BigInt* c = bi_subtract(bi1, bi2);

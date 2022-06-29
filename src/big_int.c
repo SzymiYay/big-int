@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdbool.h>
-#include "big_int.h"
+#include "../include/big_int.h"
 
 
 
@@ -50,6 +50,8 @@ BigInt* bi_new_from_string(char const * str) {
     for (unsigned int i = 0; i < a->size; ++i) {
         a->data[a->size - 1 - i] = str[i] - '0';
     }
+
+    printf("XDDDDDDDDDD create %d\n", a->size);
 
     return a;
 }
@@ -363,7 +365,7 @@ bi_Add two BigInt structures
 BigInt* bi_add(BigInt *a, BigInt *b) {
 
     size_t maxSize = a->size > b->size ? a->size : b->size;
-    BigInt* c = bi_new_with_size(maxSize + 1);
+    BigInt* c;
 
     if (a->size == 1 && a->data[0] == 0) {
         c = bi_new_from_big_int(b);
@@ -388,6 +390,7 @@ BigInt* bi_add(BigInt *a, BigInt *b) {
     }
 
     else {
+        c = bi_new_with_size(maxSize + 1);
         int carry = 0;
         for (unsigned int i = 0; i < maxSize; ++i) {
             int tmp = carry;
@@ -408,6 +411,12 @@ BigInt* bi_add(BigInt *a, BigInt *b) {
         } else {
             c->size--;
         }
+    }
+
+    int k = c->size - 1;
+    while (c->data[k] == 0) {
+        c->size--;
+        k--;
     }
     
     if (a->is_negative && b->is_negative) {
@@ -507,6 +516,12 @@ BigInt* bi_subtract(BigInt *a, BigInt *b) {
         }
     }
 
+    int k = c->size - 1;
+    while (c->data[k] == 0) {
+        c->size--;
+        k--;
+    }
+
     return c;
 }
 
@@ -529,12 +544,13 @@ Multiply two BigInt structures
 BigInt* bi_multiply(BigInt const *a, BigInt const *b) {
     size_t maxSize = a->size + b->size;
     BigInt* c = bi_new_with_size(maxSize + 1);
+    printf("XDDDDDDDDDD 1. multiply %ld\n", c->size);
     
     if ((a->is_negative && !b->is_negative) || (!a->is_negative && b->is_negative)) {
         c->is_negative = true;
     }
 
-    if ((a->size == 1 && a->data[0] == 0) || (b->size == 1 &&b->data[0] == 0)) {
+    if ((a->size == 1 && a->data[0] == 0) || (b->size == 1 && b->data[0] == 0)) {
         c->size = 1;
         c->data[0] = 0;
         c->is_negative = false;
@@ -570,12 +586,25 @@ BigInt* bi_multiply(BigInt const *a, BigInt const *b) {
         }
         startIdx += 1;
     }
+    printf("\n======================================\n");
+    for (int i = 0; i < c->size; ++i) {
+        printf("%d ", c->data[i]);
+    }
+    printf("\n======================================\n");
 
     int k = c->size - 1;
     while (c->data[k] == 0) {
         c->size--;
         k--;
     }
+
+    printf("======================================\n");
+    for (int i = 0; i < c->size; ++i) {
+        printf("%d ", c->data[i]);
+    }
+    printf("\n======================================\n");
+
+    printf("XDDDDDDDDDD 2. multiply %ld\n", c->size);
 
     return c;
 }

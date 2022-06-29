@@ -10,5 +10,6 @@ debug:
 	gdb run
 
 clean:
-	rm -rf run
-	rm -rf *.o
+	rm run
+	rm -rf src/run
+	rm -rf src/*.o

@@ -43,7 +43,7 @@ int main() {
         fscanf(gp, "%s\n", &nums[i].res);
     }
 
-    for (int i = 0; i < 20; ++i) {
+    for (int i = 0; i < 10000; ++i) {
         BigInt* b1 = bi_new_from_string(nums[i].a);
         BigInt* b2 = bi_new_from_string(nums[i].b);
         BigInt* b3 = bi_multiply(b1, b2);
@@ -68,7 +68,7 @@ int main() {
             printf("res = %s\n", nums[i].res);
 
             bi_free(c);
-            // break;
+            break;
         }
 
         free(res);
@@ -79,37 +79,6 @@ int main() {
 
     fclose(fp);
     fclose(gp);
-
-    BigInt* bi10 = bi_new_from_string("152513812818262558893");
-    bi_info(bi10);
-
-    BigInt* bi20 = bi_new_from_string("-3171625935665497546223");
-    bi_info(bi20);
-
-    BigInt* cd = bi_multiply(bi10, bi20);
-    bi_info(cd);
-    char* res2 = bi_convert_to_string(cd);
-    // printf("----------------\n");
-    // for (int i = 0; i < strlen(res2); ++i) {
-    //     printf("%d ", res2[i] - '0');
-    // }
-    // printf("\n----------------\n");
-    reverseString(res2);
-    // printf("----------------\n");
-    // for (int i = 0; i < strlen(res2); ++i) {
-    //     printf("%d ", res2[i] - '0');
-    // }
-    // printf("\n----------------\n");
-
-
-    // bi_print(cd);
-    bi_info(cd);
-
-    bi_free(bi10);
-    bi_free(bi20);
-
-    bi_free(cd);
-
 
     return 0;
 }
